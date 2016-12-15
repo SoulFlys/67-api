@@ -8,7 +8,7 @@ module.exports = {
     'GET /blog/admin': async(ctx, next) => {
         try {
             var res = await Admin.findAll();
-            console.log(res);
+            console.log('1',res);
             ctx.rest(res);
         } catch (err) {
             console.log(err);
@@ -19,6 +19,7 @@ module.exports = {
         let id = ctx.params.id;
         try {
             var res = await Admin.findById(id);
+            console.log('2',res);
             ctx.rest(res);
         } catch (err) {
             console.log(err);
@@ -32,6 +33,7 @@ module.exports = {
         // console.log(ctx.query)
         // console.log(ctx.body)
         console.log(ctx.request.body)
+        console.log('3',res);
         ctx.rest({'status':123});
     }
 }
