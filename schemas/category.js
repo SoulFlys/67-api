@@ -33,9 +33,9 @@ CategorySchema.statics = {
     findAll: async function() {
         return this.find({}).sort('meta.createAt').exec()
     },
-    findById: async function(id) {
-        return this.findOne({_id: id}).exec()
-    }
+    // findById: async function(id) {
+    //     return this.findOne({_id: id}).exec()
+    // },
 }
 
 export default CategorySchema;

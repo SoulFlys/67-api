@@ -20,7 +20,7 @@ const app = new Koa();
 
 app.use(convert.compose(
     cors(),
-    // logger(),
+    logger(),
     bodyParser(),
     init.restify('/' + baseApi),
     router()

@@ -11,11 +11,11 @@ let AdminSchema = new mongoose.Schema({
     meta: {
         createAt: {
             type: Date,
-            default: Date.now()
+            default: parseInt(Date.now()/1000)
         },
         updateAt: {
             type: Date,
-            default: Date.now()
+            default: parseInt(Date.now()/1000)
         }
     },
     status: {

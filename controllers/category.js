@@ -10,8 +10,30 @@ module.exports = {
         ctx.rest({'status':'ok'});
     },
     'POST /admin/category': async(ctx, next) => {
-        // console.log(ctx.request.body);
         let category = await Category.findAll();
         ctx.rest(category);
+    },
+    'DELETE /admin/category/delete': async(ctx, next) => {
+        let id = ctx.request.body.id;
+        let category = await Category.findByIdAndRemove(id);
+        if(category){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
+        }
+    },
+    'POST /admin/category/findById': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let category = await Category.findById(id);
+        ctx.rest(category);
+    },
+    'PUT /admin/category/update': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let category = await Category.findByIdAndUpdate(id, ctx.request.body, {new: true});
+        if(category){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
+        }
     }
 }
