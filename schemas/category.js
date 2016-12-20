@@ -29,6 +29,7 @@ CategorySchema.pre('save', function(next){
     next();
 });
 
+
 CategorySchema.statics = {
     findAll: async function() {
         return this.find({}).sort('meta.createAt').exec()
