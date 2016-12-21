@@ -5,7 +5,6 @@ const APIError = require('../lib/init').APIError;
 
 module.exports = {
     'POST /admin/category/add': async(ctx, next) => {
-        // console.log(ctx.request.body);
         let category = await new Category(ctx.request.body).save();
         ctx.rest({'status': 'ok'});
     },
