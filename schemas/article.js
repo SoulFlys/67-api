@@ -9,11 +9,11 @@ const ArtSchema = new mongoose.Schema({
     image: {type: String},
     content: {type: String, required: true},
     readings: {type: Number, required: true, default: 1},
-    tags: {type: String},
+    tags: {type: Array },
     author: {type: String},
-    status: {type: Number, default: 1},
-    alone: {type: Number, default: 0},
-    delete: {type: Number, default: 0},
+    alone: {type: Boolean, default: false},
+    delete: {type: Boolean, default: false},
+    status: {type: Boolean, default: true},
     meta: {
         createAt: {
             type: Date,

@@ -6,8 +6,8 @@ const CategorySchema = new mongoose.Schema({
     name: {type: String, required: true},
     type: {type: Number, default: 1},       //1=>分类栏目 2=>单独页面
     router: {type: String, required: true}, //栏目指向地址(2=>id)
-    sort: {type: Number, required: true, default: 1},//（1=启用 0=禁用）
-    status: {type: Number, default: 1},
+    sort: {type: Number, required: true, default: 1},
+    status: {type: Boolean, default: true},
     meta: {
         createAt: {
             type: Date,

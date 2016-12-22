@@ -6,7 +6,7 @@ const LinkSchema = new mongoose.Schema({
     href: {type: String, required: true},
     type: {type: String, required: true},
     sort: {type: Number, required: true, default: 1},
-    status: {type: Number, default: 1},
+    status: {type: Boolean, default: true},
     meta: {
         createAt: {
             type: Date,
