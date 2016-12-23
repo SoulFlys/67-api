@@ -11,4 +11,27 @@ module.exports = {
         let category = await Article.find({}).populate('cid').sort('meta.createAt');
         ctx.rest(category);
     },
+    'POST /admin/article/trash': async(ctx, next) => {
+        let category = await Article.find({delete:true}).populate('cid').sort('meta.createAt');
+        ctx.rest(category);
+    },
+    'PUT /admin/article/nodelete': async(ctx, next) => {
+        let id = ctx.request.body.id;
+        let isDel = ctx.request.body.del;
+        let result = await Article.update({_id:id},{$set:{delete:isDel}});
+        if(result){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
+        }
+    },
+    'DELETE /admin/article/delete': async(ctx, next) => {
+        let id = ctx.request.body.id;
+        let result = await Article.findByIdAndRemove(id);
+        if(result){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
+        }
+    },
 }
