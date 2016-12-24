@@ -19,7 +19,7 @@ module.exports = {
         let tmpArr = file['filename'].split('.');
         let ext ='.' + tmpArr[tmpArr.length - 1];
         let filename = formatDate(new Date()) + '.' + parseInt(Math.random() * 100) + ext;
-        let stream = fs.createWriteStream(path.join(path.resolve(__dirname,'../uploads'), filename));
+        let stream = fs.createWriteStream(path.join(path.resolve(__dirname,'../uploads/images'), filename));
         file.pipe(stream);
         let result = await new File({name:filename,path:stream.path}).save();
         // console.log(file);
