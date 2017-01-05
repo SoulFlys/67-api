@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+let ObjectId = Schema.Types.ObjectId
 
 const BasisSchema = new mongoose.Schema({
     logo: {type: String, required: true},
@@ -8,6 +9,12 @@ const BasisSchema = new mongoose.Schema({
     weibo: {type: String},
     qq: {type: String},
     github: {type: String},
+    focusTitle1:{type: String},
+    focusAid1:{type: ObjectId, ref: 'Article'},
+    focusPicUrl1:{type: String},
+    focusTitle2:{type: String},
+    focusAid1:{type: ObjectId, ref: 'Article'},
+    focusPicUrl1:{type: String},
     copyright: {type: String, required: true},
     record: {type: String, required: true},
     hits: {type: Number,default: 0},

@@ -28,6 +28,7 @@ module.exports = {
         ctx.rest({
             id: result._id,
             name:filename,
+            path:'/images/' + filename,
             url:baseUrl + filename
         });
     },
