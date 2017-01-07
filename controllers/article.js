@@ -15,6 +15,11 @@ module.exports = {
         let category = await Article.find({delete:true}).populate('cid').sort('meta.createAt');
         ctx.rest(category);
     },
+    'POST /admin/article/findById': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let category = await Article.findById(id);
+        ctx.rest(category);
+    },
     'PUT /admin/article/nodelete': async(ctx, next) => {
         let id = ctx.request.body.id;
         let isDel = ctx.request.body.del;
