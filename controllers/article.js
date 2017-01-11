@@ -11,6 +11,20 @@ module.exports = {
         let category = await Article.find({}).populate('cid').sort('meta.createAt');
         ctx.rest(category);
     },
+    'PUT /admin/article/update': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let article = await Article.findById(id);
+        ctx.request.body._id = ctx.request.body.id;
+        delete ctx.request.body.id;
+
+        Object.assign(article, ctx.request.body);
+        let result = await new Article(article).save();
+        if(result){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
+        }
+    },
     'POST /admin/article/trash': async(ctx, next) => {
         let category = await Article.find({delete:true}).populate('cid').sort('meta.createAt');
         ctx.rest(category);

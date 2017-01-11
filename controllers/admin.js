@@ -1,39 +1,57 @@
 import mongoose from 'mongoose'
 import Admin from '../models/admin'
-import {baseApi} from '../config'
-mongoose.Promise = global.Promise;
-const APIError = require('../lib/init').APIError;
+// import {baseApi} from '../config'
+// mongoose.Promise = global.Promise;
+// const APIError = require('../lib/init').APIError;
+
 
 module.exports = {
-    'GET /blog/admin': async(ctx, next) => {
-        try {
-            var res = await Admin.findAll();
-            console.log('1',res);
-            ctx.rest(res);
-        } catch (err) {
-            console.log(err);
-            throw new APIError('admin:not_found', 'admin not found');
+    'POST /admin/admin/add': async(ctx, next) => {
+        let admin = await new Admin(ctx.request.body).save();
+        ctx.rest({'status':'ok'});
+    },
+    'POST /admin/admin': async(ctx, next) => {
+        let admins = await Admin.find({}).sort('meta.createAt');
+        ctx.rest(admins);
+    },
+    'DELETE /admin/admin/delete': async(ctx, next) => {
+        let id = ctx.request.body.id;
+        let admin = await Admin.findByIdAndRemove(id);
+        if(admin){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
         }
     },
-    'GET /blog/admin/:id': async(ctx, next) => {
-        let id = ctx.params.id;
-        try {
-            var res = await Admin.findById(id);
-            console.log('2',res);
-            ctx.rest(res);
-        } catch (err) {
-            console.log(err);
-            throw new APIError('admin:not_found', 'admin_id not found');
+    'POST /admin/admin/findById': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let admin = await Admin.findById(id);
+        ctx.rest(admin);
+    },
+    'PUT /admin/admin/update': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let admin = await Admin.findById(id);
+        ctx.request.body._id = ctx.request.body.id;
+        delete ctx.request.body.id;
+
+        Object.assign(admin, ctx.request.body);
+        let result = await new Admin(admin).save();
+        if(result){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
         }
     },
-    'POST /blog/admin/add': async(ctx, next) => {
-        // console.log(ctx)
-        // console.log(ctx.params.username)
-        // console.log(ctx.params)
-        // console.log(ctx.query)
-        // console.log(ctx.body)
-        console.log(ctx.request.body)
-        console.log('3',res);
-        ctx.rest({'status':123});
-    }
+    'POST /admin/admin/login': async(ctx, next) => {
+        let username = ctx.request.body.username;
+        let password = ctx.request.body.password;
+        let admin = await Admin.findOne({username:username});
+        if(admin){
+            console.log(admin);
+            let isTrue = await admin.comparePassword(password);
+            console.log(isTrue);
+        }else{
+            ctx.rest({'status':'no',message:'用户名不存在'});
+        }
+    },
 }

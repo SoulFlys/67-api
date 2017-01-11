@@ -11,6 +11,7 @@
   "author": "793207918@qq.com",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "koa": "^2.0.0",
     "mongoose": "^4.7.2"
   },
