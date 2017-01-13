@@ -43,13 +43,21 @@ module.exports = {
         }
     },
     'POST /admin/admin/login': async(ctx, next) => {
+        //初始账号密码 admin 123456
         let username = ctx.request.body.username;
         let password = ctx.request.body.password;
         let admin = await Admin.findOne({username:username});
         if(admin){
-            console.log(admin);
             let isTrue = await admin.comparePassword(password);
-            console.log(isTrue);
+            if(isTrue){
+                ctx.rest({'status':'ok',data:{
+                    username:admin.username,
+                    nickname:admin.nickname,
+                    realname:admin.realname
+                }});
+            }else{
+                ctx.rest({'status':'no',message:'密码错误，请重新输入密码'});
+            }
         }else{
             ctx.rest({'status':'no',message:'用户名不存在'});
         }

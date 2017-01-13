@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+mongoose.Promise = global.Promise;
 let SALT_WORK_FACTOR = 10
 
 let AdminSchema = new mongoose.Schema({
@@ -37,18 +38,12 @@ AdminSchema.pre('save', function(next){
 });
 
 AdminSchema.methods = {
-    comparePassword: function(_password){
-        bcrypt.compare(_password, this.password, (err, res) => res);
+    comparePassword: async function(_password){
+        let password = this.password;
+        let res = await bcrypt.compare(_password, password).then(res => res);
+        return res;
     }
 }
 
-// AdminSchema.statics = {
-//     findAll: async function() {
-//         return this.find({}).sort('meta.createAt').exec()
-//     },
-//     findById: async function(id) {
-//         return this.findOne({_id: id}).exec()
-//     }
-// }
 
 export default AdminSchema
