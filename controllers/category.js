@@ -9,7 +9,11 @@ module.exports = {
         ctx.rest({'status': 'ok'});
     },
     'POST /admin/category': async(ctx, next) => {
-        let category = await Category.findAll();
+        let category = await Category.find({}).sort('sort');
+        ctx.rest(category);
+    },
+    'POST /blog/category': async(ctx, next) => {
+        let category = await Category.find(ctx.request.body).sort('-sort');
         ctx.rest(category);
     },
     'DELETE /admin/category/delete': async(ctx, next) => {
