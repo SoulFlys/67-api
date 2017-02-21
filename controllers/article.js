@@ -11,6 +11,28 @@ module.exports = {
         let category = await Article.find({}).populate('cid').sort('meta.createAt');
         ctx.rest(category);
     },
+    'POST /blog/allArticle': async(ctx, next) => {
+        let category = await Article.find({status:true,delete:false}).populate('cid').sort('meta.createAt');
+        ctx.rest(category);
+    },
+    'POST /blog/article': async(ctx, next) => {
+        let currentPage = ctx.request.body.currentPage;
+        let pageSize = ctx.request.body.pageSize;
+        let cid = ctx.request.body.cid;
+        let articleList;
+        let count;
+        if(cid){
+            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize);
+            count = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).count();
+        }else{
+            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize);
+            count = await Article.find({status:true}).populate('cid').sort('meta.createAt').count();
+        }
+        ctx.rest({
+            articleList:articleList,
+            count:count
+        });
+    },
     'PUT /admin/article/update': async(ctx,next) => {
         let id = ctx.request.body.id;
         let article = await Article.findById(id);
@@ -30,6 +52,11 @@ module.exports = {
         ctx.rest(category);
     },
     'POST /admin/article/findById': async(ctx,next) => {
+        let id = ctx.request.body.id;
+        let category = await Article.findById(id);
+        ctx.rest(category);
+    },
+    'POST /blog/article/findById': async(ctx,next) => {
         let id = ctx.request.body.id;
         let category = await Article.findById(id);
         ctx.rest(category);

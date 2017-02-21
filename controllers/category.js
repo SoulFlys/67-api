@@ -13,7 +13,7 @@ module.exports = {
         ctx.rest(category);
     },
     'POST /blog/category': async(ctx, next) => {
-        let category = await Category.find(ctx.request.body).sort('-sort');
+        let category = await Category.find({status:true}).sort('sort');
         ctx.rest(category);
     },
     'DELETE /admin/category/delete': async(ctx, next) => {

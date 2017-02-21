@@ -10,6 +10,10 @@ module.exports = {
         let links = await Link.find({}).sort('meta.createAt');
         ctx.rest(links);
     },
+    'POST /blog/link': async(ctx, next) => {
+        let links = await Link.find({status:true}).sort('sort');
+        ctx.rest(links);
+    },
     'DELETE /admin/link/delete': async(ctx, next) => {
         let id = ctx.request.body.id;
         let link = await Link.findByIdAndRemove(id);
