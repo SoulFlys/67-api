@@ -13,8 +13,8 @@ module.exports = {
 
         let currentPage = ctx.request.body.currentPage;
         let pageSize = ctx.request.body.pageSize;
-        let articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize);
-        let count = await Article.find({status:true}).populate('cid').sort('meta.createAt').count();
+        let articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description');
+        let count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').count();
 
         let id = ctx.request.body.id;
         let article = {};

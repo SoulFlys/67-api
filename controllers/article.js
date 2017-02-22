@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import Article from '../models/article'
 
-
 module.exports = {
     'POST /admin/article/add': async(ctx, next) => {
         let article = await new Article(ctx.request.body).save();
@@ -11,8 +10,18 @@ module.exports = {
         let category = await Article.find({}).populate('cid').sort('meta.createAt');
         ctx.rest(category);
     },
+    'POST /blog/article/readings': async(ctx, next) => {
+        let id = ctx.request.body.id;
+        let article = await Article.findById(id);
+        let result = await Article.update({_id:id},{$set:{readings:article.readings + 1}});
+        if(result){
+            ctx.rest({'status':'ok'});
+        }else{
+            ctx.rest({'status':'no'});
+        }
+    },
     'POST /blog/allArticle': async(ctx, next) => {
-        let category = await Article.find({status:true,delete:false}).populate('cid').sort('meta.createAt');
+        let category = await Article.find({status:true,delete:false}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').select('title meta _id');
         ctx.rest(category);
     },
     'POST /blog/article': async(ctx, next) => {
@@ -22,11 +31,11 @@ module.exports = {
         let articleList;
         let count;
         if(cid){
-            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize);
+            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description');
             count = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).count();
         }else{
-            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize);
-            count = await Article.find({status:true}).populate('cid').sort('meta.createAt').count();
+            articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description');
+            count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').count();
         }
         ctx.rest({
             articleList:articleList,
