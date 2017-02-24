@@ -31,12 +31,13 @@ module.exports = {
         let articleList;
         let count;
         if(cid){
-            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description');
+            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description comment');
             count = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).count();
         }else{
-            articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description');
+            articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description comment');
             count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').count();
         }
+
         ctx.rest({
             articleList:articleList,
             count:count
@@ -67,8 +68,8 @@ module.exports = {
     },
     'POST /blog/article/findById': async(ctx,next) => {
         let id = ctx.request.body.id;
-        let category = await Article.findById(id);
-        ctx.rest(category);
+        let article = await Article.findById(id);
+        ctx.rest(article);
     },
     'PUT /admin/article/nodelete': async(ctx, next) => {
         let id = ctx.request.body.id;

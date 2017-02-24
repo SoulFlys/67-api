@@ -9,6 +9,7 @@ const ArtSchema = new mongoose.Schema({
     image: {type: String},
     content: {type: String, required: true},
     readings: {type: Number, required: true, default: 1},
+    comment: {type: Number, default: 0},
     tags: {type: Array },
     author: {type: String},
     alone: {type: Boolean, default: false},

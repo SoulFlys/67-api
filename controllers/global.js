@@ -4,6 +4,7 @@ import Link from '../models/link'
 import Focus from '../models/focus'
 import Article from '../models/article'
 
+
 module.exports = {
     'POST /blog/global': async(ctx, next) => {
         let basis = await Basis.find({}).sort('meta.createAt');
