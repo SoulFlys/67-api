@@ -58,7 +58,6 @@ module.exports = {
         let path = file.path;
         let resultDb = await File.findByIdAndRemove(id);
         let resultFile = await fs.unlinkSync(path);
-        // console.log(resultDb,resultFile);
         ctx.rest({'status':'ok'});
     }
 }

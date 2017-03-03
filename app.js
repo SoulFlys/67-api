@@ -15,10 +15,6 @@ mongoose.connection.on('error', console.error)
 
 const app = new Koa();
 
-// app.use(convert(async(ctx, next) => {
-//     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
-//     await next();
-// }));
 
 app.use(convert.compose(
     staticServer(path.join(__dirname,'uploads')),
@@ -29,10 +25,6 @@ app.use(convert.compose(
     router()
 ))
 
-// app.use(cors());
-// app.use(bodyParser());
-// app.use(init.restify('/' + baseApi));
-// app.use(router());
 
 app.listen(port);
 console.log('app started at port ' + port + '...');

@@ -1,6 +1,4 @@
-import mongoose from 'mongoose'
 import Category from '../models/category'
-// mongoose.Promise = global.Promise;
 const APIError = require('../lib/init').APIError;
 
 module.exports = {
@@ -10,10 +8,6 @@ module.exports = {
     },
     'POST /admin/category': async(ctx, next) => {
         let category = await Category.find({}).sort('sort');
-        ctx.rest(category);
-    },
-    'POST /blog/category': async(ctx, next) => {
-        let category = await Category.find({status:true}).sort('sort');
         ctx.rest(category);
     },
     'DELETE /admin/category/delete': async(ctx, next) => {
@@ -31,15 +25,6 @@ module.exports = {
         ctx.rest(category);
     },
     'PUT /admin/category/update': async(ctx, next) => {
-        // let id = ctx.request.body.id;
-        // ctx.request.body.meta.updateAt = new Date();
-        // let category = await Category.findByIdAndUpdate(id, ctx.request.body);
-        // if(category){
-        //     ctx.rest({'status':'ok'});
-        // }else{
-        //     ctx.rest({'status':'no'});
-        // }
-
         let id = ctx.request.body.id;
         let category = await Category.findById(id);
         ctx.request.body._id = ctx.request.body.id;
@@ -52,5 +37,9 @@ module.exports = {
         }else{
             ctx.rest({'status':'no'});
         }
-    }
+    },
+    'GET /blog/category': async(ctx, next) => {
+        let category = await Category.find({status:true}).sort('sort');
+        ctx.rest(category);
+    },
 }

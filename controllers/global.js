@@ -6,7 +6,7 @@ import Article from '../models/article'
 
 
 module.exports = {
-    'POST /blog/global': async(ctx, next) => {
+    'GET /blog/global': async(ctx, next) => {
         let basis = await Basis.find({}).sort('meta.createAt');
         let category = await Category.find({status:true}).sort('sort');
         let links = await Link.find({status:true}).sort('sort');

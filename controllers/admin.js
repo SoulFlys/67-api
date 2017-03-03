@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import Admin from '../models/admin'
 // import {baseApi} from '../config'
 // mongoose.Promise = global.Promise;
