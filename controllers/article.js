@@ -1,4 +1,26 @@
 import Article from '../models/article'
+import {fetch} from '../lib/api'
+import _ from 'lodash'
+
+// articleList = _.each(articleList, async (item)=>{
+//     item.comment = await getComment(item._id)
+// })
+
+const getComment = (articleList) => {
+    return new Promise((resolve, rej)=> {
+        const params = { short_name: '67one',thread_key:String(id) }
+        fetch('https://api.duoshuo.com/threads/listPosts.json',params).then((res)=>{
+            console.log('id',id,'comments',res.thread.comments)
+            resolve(res.thread.comments)
+        })
+    });
+
+
+    // const params = { short_name: '67one',thread_key:String(id) }
+    // let res = await fetch('https://api.duoshuo.com/threads/listPosts.json',params)
+    // console.log('id',id,'comments',res.thread.comments)
+    // return res.thread.comments;
+}
 
 module.exports = {
     'POST /admin/article/add': async(ctx, next) => {
@@ -52,12 +74,12 @@ module.exports = {
         }
     },
     'GET /blog/article/findById': async(ctx,next) => {
-        let id = ctx.request.body.id;
+        let id = ctx.query.id;
         let article = await Article.findById(id);
         ctx.rest(article);
     },
     'GET /blog/article/readings': async(ctx, next) => {
-        let id = ctx.request.body.id;
+        let id = ctx.query.id;
         let article = await Article.findById(id);
         let result = await Article.update({_id:id},{$set:{readings:article.readings + 1}});
         if(result){
@@ -71,9 +93,9 @@ module.exports = {
         ctx.rest(category);
     },
     'GET /blog/article': async(ctx, next) => {
-        let currentPage = ctx.request.body.currentPage;
-        let pageSize = ctx.request.body.pageSize;
-        let cid = ctx.request.body.cid;
+        let currentPage = parseInt(ctx.query.currentPage);
+        let pageSize = parseInt(ctx.query.pageSize);
+        let cid = ctx.query.cid;
         let articleList;
         let count;
         if(cid){
@@ -83,6 +105,17 @@ module.exports = {
             articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description comment');
             count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').count();
         }
+
+        // console.log(articleList)
+
+        
+
+        // for(let i = 0; i<articleList.length; i++){
+        //     articleList[i].comment = getComment(articleList[i]._id)
+        // }
+
+
+        console.log(articleList)
 
         ctx.rest({
             articleList:articleList,

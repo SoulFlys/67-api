@@ -11,8 +11,10 @@
   "author": "793207918@qq.com",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.15.3",
     "bcrypt": "^1.0.2",
     "koa": "^2.0.0",
+    "lodash": "^4.17.4",
     "mongoose": "^4.7.2",
     "superagent": "^3.5.0"
   },
