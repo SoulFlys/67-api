@@ -11,6 +11,7 @@
   "author": "793207918@qq.com",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.1.5",
     "axios": "^0.15.3",
     "bcrypt": "^1.0.2",
     "koa": "^2.0.0",
