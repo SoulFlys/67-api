@@ -6,7 +6,7 @@ module.exports = {
         ctx.rest({'status':'ok'});
     },
     'POST /admin/focus': async(ctx, next) => {
-        let focus = await Focus.find({}).populate('articleId').sort('meta.createAt');
+        let focus = await Focus.find({}).populate('articleId').sort('.createAt');
         ctx.rest(focus);
     },
     'DELETE /admin/focus/delete': async(ctx, next) => {

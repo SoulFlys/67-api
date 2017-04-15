@@ -8,35 +8,17 @@ const CategorySchema = new mongoose.Schema({
     router: {type: String, required: true}, //栏目指向地址(2=>id)
     sort: {type: Number, required: true, default: 1},
     status: {type: Boolean, default: true},
-    meta: {
-        createAt: {
-            type: Date,
-            default: Date.now()
-        },
-        updateAt: {
-            type: Date,
-            default: Date.now()
-        }
-    }
+    createAt: {type: Date,default: new Date()},
+    updateAt: {type: Date,default: new Date()}
 });
 
 CategorySchema.pre('save', function(next){
     if (this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
+        this.createAt = this.updateAt = new Date()
     } else {
-        this.meta.updateAt = Date.now()
+        this.updateAt = new Date()
     }
     next();
 });
-
-
-CategorySchema.statics = {
-    findAll: async function() {
-        return this.find({}).sort('meta.createAt').exec()
-    },
-    // findById: async function(id) {
-    //     return this.findOne({_id: id}).exec()
-    // },
-}
 
 export default CategorySchema;

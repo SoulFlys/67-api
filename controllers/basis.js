@@ -6,7 +6,7 @@ module.exports = {
         ctx.rest({'status':'ok'});
     },
     'POST /admin/basis': async(ctx, next) => {
-        let basis = await Basis.find({}).sort('meta.createAt');
+        let basis = await Basis.find({}).sort('.createAt');
         ctx.rest(basis);
     },
     'PUT /admin/basis/update': async(ctx,next) => {
@@ -24,11 +24,11 @@ module.exports = {
         }
     },
     'GET /blog/basis': async(ctx, next) => {
-        let basis = await Basis.find({}).sort('meta.createAt');
+        let basis = await Basis.find({}).sort('.createAt');
         ctx.rest(basis[0]);
     },
     'GET /blog/basis/hits': async(ctx, next) => {
-        let basis = await Basis.find({}).sort('meta.createAt');
+        let basis = await Basis.find({}).sort('.createAt');
         let result = await Basis.update({_id:basis[0]._id},{$set:{hits:basis[0].hits + 1}});
         if(result){
             ctx.rest({'status':'ok'});

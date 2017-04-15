@@ -7,7 +7,7 @@ module.exports = {
         ctx.rest({'status':'ok'});
     },
     'POST /admin/article': async(ctx, next) => {
-        let category = await Article.find({}).populate('cid').sort('meta.createAt');
+        let category = await Article.find({}).populate('cid').sort('createAt');
         ctx.rest(category);
     },
     'PUT /admin/article/update': async(ctx,next) => {
@@ -25,7 +25,7 @@ module.exports = {
         }
     },
     'POST /admin/article/trash': async(ctx, next) => {
-        let category = await Article.find({delete:true}).populate('cid').sort('meta.createAt');
+        let category = await Article.find({delete:true}).populate('cid').sort('.createAt');
         ctx.rest(category);
     },
     'POST /admin/article/findById': async(ctx,next) => {
@@ -68,7 +68,7 @@ module.exports = {
         }
     },
     'GET /blog/allArticle': async(ctx, next) => {
-        let category = await Article.find({status:true,delete:false}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').select('title meta _id');
+        let category = await Article.find({status:true,delete:false}).$where('this.title !== "关于我"').populate('cid').sort('.createAt').select('title  _id');
         ctx.rest(category);
     },
     'GET /blog/article': async(ctx, next) => {
@@ -78,11 +78,11 @@ module.exports = {
         let articleList;
         let count;
         if(cid){
-            articleList = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description comment');
-            count = await Article.find({status:true}).populate('cid').sort('meta.createAt').where('cid',cid).count();
+            articleList = await Article.find({status:true}).populate('cid').sort('.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize).select('title  _id readings image description comment');
+            count = await Article.find({status:true}).populate('cid').sort('.createAt').where('cid',cid).count();
         }else{
-            articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title meta _id readings image description comment');
-            count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('meta.createAt').count();
+            articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title  _id readings image description comment');
+            count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('.createAt').count();
         }
 
         // articleList = await getComment(articleList);

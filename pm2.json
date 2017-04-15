@@ -1,0 +1,10 @@
+{
+    "apps": [
+        {
+            "name": "67-api",
+            "script": "entry.js",
+            "merge_logs": true,
+            "max_memory_restart": "200M",
+        }
+    ]
+}

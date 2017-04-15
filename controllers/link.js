@@ -7,7 +7,7 @@ module.exports = {
         ctx.rest({'status':'ok'});
     },
     'POST /admin/link': async(ctx, next) => {
-        let links = await Link.find({}).sort('meta.createAt');
+        let links = await Link.find({}).sort('.createAt');
         ctx.rest(links);
     },
     'DELETE /admin/link/delete': async(ctx, next) => {

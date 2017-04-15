@@ -4,7 +4,7 @@ mongoose.Promise = global.Promise;
 let SALT_WORK_FACTOR = 10
 
 let AdminSchema = new mongoose.Schema({
-    username: {type: String,required: true},
+    username: {type: String,required: true,unique: true},
     nickname: String,
     realname: String,
     password: {type: String,required: true},
@@ -12,23 +12,15 @@ let AdminSchema = new mongoose.Schema({
     createip: {type: String},
     lastloginip: String,
     status: {type: Boolean, default: true},
-    meta: {
-        createAt: {
-            type: Date,
-            default: parseInt(Date.now()/1000)
-        },
-        updateAt: {
-            type: Date,
-            default: parseInt(Date.now()/1000)
-        }
-    }
+    createAt: {type: Date,default: new Date()},
+    updateAt: {type: Date,default: new Date()}
 });
 
 AdminSchema.pre('save', function(next){
     if (this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
+        this.createAt = this.updateAt = new Date()
     } else {
-        this.meta.updateAt = Date.now()
+        this.updateAt = new Date()
     }
 
     bcrypt.hash(this.password,SALT_WORK_FACTOR,(err, hash) => {

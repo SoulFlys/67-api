@@ -7,7 +7,7 @@ import {baseUrl} from '../config'
 
 module.exports = {
     'POST /admin/file': async(ctx, next) => {
-        let files = await File.find({}).sort('meta.createAt');
+        let files = await File.find({}).sort('.createAt');
         for(let file of files){
             file.url = baseUrl + file.name;
         }
@@ -43,7 +43,7 @@ module.exports = {
         let res = await readAndWrite();
 
         if(res === true){
-            let result = await new File({name:filename,path:filePath,url:baseUrl+filename}).save();
+            let result = await new File({name:filename,path:'/images/' + filename,url:baseUrl+filename}).save();
             ctx.rest({
                 id: result._id,
                 name:filename,

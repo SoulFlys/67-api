@@ -15,23 +15,15 @@ const ArtSchema = new mongoose.Schema({
     alone: {type: Boolean, default: false},
     delete: {type: Boolean, default: false},
     status: {type: Boolean, default: true},
-    meta: {
-        createAt: {
-            type: Date,
-            default: Date.now()
-        },
-        updateAt: {
-            type: Date,
-            default: Date.now()
-        }
-    }
+    createAt: {type: Date,default: new Date()},
+    updateAt: {type: Date,default: new Date()}
 });
 
 ArtSchema.pre('save', function(next){
     if (this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
+        this.createAt = this.updateAt = new Date()
     } else {
-        this.meta.updateAt = Date.now()
+        this.updateAt = new Date()
     }
     next();
 });

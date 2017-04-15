@@ -1,16 +1,22 @@
 import Admin from '../models/admin'
-// import {baseApi} from '../config'
-// mongoose.Promise = global.Promise;
-// const APIError = require('../lib/init').APIError;
-
 
 module.exports = {
+    'GET /admin/67one/init': async (ctx,next) => {
+        let admin = await new Admin({
+            username: 'xiaofang',
+            nickname: '时光笑我温暖如阳',
+            realname: '小方',
+            password: '123456',
+            status: true
+        }).save();
+        ctx.rest({'status':'ok'});
+    },
     'POST /admin/admin/add': async(ctx, next) => {
         let admin = await new Admin(ctx.request.body).save();
         ctx.rest({'status':'ok'});
     },
     'POST /admin/admin': async(ctx, next) => {
-        let admins = await Admin.find({}).sort('meta.createAt');
+        let admins = await Admin.find({}).sort('createAt');
         ctx.rest(admins);
     },
     'DELETE /admin/admin/delete': async(ctx, next) => {
@@ -42,7 +48,6 @@ module.exports = {
         }
     },
     'POST /admin/admin/login': async(ctx, next) => {
-        //初始账号密码 admin 123456
         let username = ctx.request.body.username;
         let password = ctx.request.body.password;
         let admin = await Admin.findOne({username:username});

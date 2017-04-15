@@ -15,23 +15,15 @@ const BasisSchema = new mongoose.Schema({
     copyright: {type: String, required: true},
     record: {type: String, required: true},
     hits: {type: Number,default: 0},
-    meta: {
-        createAt: {
-            type: Date,
-            default: Date.now()
-        },
-        updateAt: {
-            type: Date,
-            default: Date.now()
-        }
-    }
+    createAt: {type: Date,default: new Date()},
+    updateAt: {type: Date,default: new Date()}
 });
 
 BasisSchema.pre('save', function(next){
     if (this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now()
+        this.createAt = this.updateAt = new Date()
     } else {
-        this.meta.updateAt = Date.now()
+        this.updateAt = new Date()
     }
     next();
 });
