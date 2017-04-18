@@ -38,8 +38,14 @@ module.exports = {
             ctx.rest({'status':'no'});
         }
     },
+
     'GET /blog/link': async(ctx, next) => {
-        let links = await Link.find({status:true}).sort('sort');
-        ctx.rest(links);
+        try{
+            let links = await Link.find({status:true}).sort('sort');
+            ctx.rest({status:true,message:'',result:links});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'获取友情链接失败',result:[]});
+        }
     },
 }

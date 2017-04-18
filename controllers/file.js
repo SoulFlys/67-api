@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import asyncBusboy from 'async-busboy'
 import File from '../models/file'
-import {formatDate} from '../lib/fiter'
+import {formatDate} from '../lib/filter'
 import {baseUrl} from '../config'
 
 module.exports = {

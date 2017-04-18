@@ -52,44 +52,60 @@ module.exports = {
             ctx.rest({'status':'no'});
         }
     },
+
+
+
     'GET /blog/article/findById': async(ctx,next) => {
-        let id = ctx.query.id;
-        let article = await Article.findById(id);
-        ctx.rest(article);
+        try{
+            let id = ctx.query.id;
+            let article = await Article.findById(id);
+            ctx.rest({status:true,message:'',result:article});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'当前文章不存在',result:{}});
+        }
     },
     'GET /blog/article/readings': async(ctx, next) => {
-        let id = ctx.query.id;
-        let article = await Article.findById(id);
-        let result = await Article.update({_id:id},{$set:{"readings":article.readings + 1}});
-        if(result){
-            ctx.rest({'status':'ok'});
-        }else{
-            ctx.rest({'status':'no'});
+        try{
+            let id = ctx.query.id;
+            let article = await Article.findById(id);
+            let result = await Article.update({_id:id},{$set:{"readings":article.readings + 1}});
+            ctx.rest({status:true,message:'',result:result});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'更新阅读量失败',result:{}});
         }
     },
-    'GET /blog/allArticle': async(ctx, next) => {
-        let category = await Article.find({status:true,delete:false}).$where('this.title !== "关于我"').populate('cid').sort('.createAt').select('title  _id');
-        ctx.rest(category);
+    'GET /blog/allArtList': async(ctx, next) => {
+        try{
+            let category = await Article.find({status:true,delete:false}).sort('createAt').select('_id title createAt');
+            ctx.rest({status:true,message:'',result:category});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'获取所有文章列表失败',result:[]});
+        }
     },
+    //首页分页获取文章列表
     'GET /blog/article': async(ctx, next) => {
-        let currentPage = parseInt(ctx.query.currentPage);
-        let pageSize = parseInt(ctx.query.pageSize);
-        let cid = ctx.query.cid;
-        let articleList;
-        let count;
-        if(cid){
-            articleList = await Article.find({status:true}).populate('cid').sort('.createAt').where('cid',cid).skip(pageSize*(currentPage-1)).limit(pageSize).select('title  _id readings image description comment');
-            count = await Article.find({status:true}).populate('cid').sort('.createAt').where('cid',cid).count();
-        }else{
-            articleList = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('.createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('title  _id readings image description comment');
-            count = await Article.find({status:true}).$where('this.title !== "关于我"').populate('cid').sort('.createAt').count();
+        try{
+            let currentPage = parseInt(ctx.query.currentPage);
+            let pageSize = parseInt(ctx.query.pageSize);
+            let articleList = await Article.find({status:true,delete:false}).sort('createAt').skip(pageSize*(currentPage-1)).limit(pageSize).select('_id title readings image description comment createAt');
+            let count = await Article.find({status:true,delete:false}).count();
+            ctx.rest({
+                status:true,
+                message:'',
+                result:{
+                    articleList:articleList,
+                    count:count
+                }
+            });
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'获取分页列表失败',result:{
+                articleList:[],
+                count:0
+            }});
         }
-
-        // articleList = await getComment(articleList);
-        // console.log(articleList)
-        ctx.rest({
-            articleList:articleList,
-            count:count
-        });
     },
 }

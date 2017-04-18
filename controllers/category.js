@@ -38,8 +38,14 @@ module.exports = {
             ctx.rest({'status':'no'});
         }
     },
+
     'GET /blog/category': async(ctx, next) => {
-        let category = await Category.find({status:true}).sort('sort');
-        ctx.rest(category);
+        try{
+            let category = await Category.find({status:true}).sort('sort');
+            ctx.rest({status:true,message:'',result:category});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'获取文章分类失败',result:[]});
+        }
     },
 }

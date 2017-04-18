@@ -23,17 +23,26 @@ module.exports = {
             ctx.rest({'status':'no'});
         }
     },
+
+
+
     'GET /blog/basis': async(ctx, next) => {
-        let basis = await Basis.find({}).sort('.createAt');
-        ctx.rest(basis[0]);
+        try{
+            let basis = await Basis.find({}).sort('.createAt');
+            ctx.rest({status:true,message:'',result:basis[0]});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'获取基本信息失败',result:{}});
+        }
     },
     'GET /blog/basis/hits': async(ctx, next) => {
-        let basis = await Basis.find({}).sort('.createAt');
-        let result = await Basis.update({_id:basis[0]._id},{$set:{hits:basis[0].hits + 1}});
-        if(result){
-            ctx.rest({'status':'ok'});
-        }else{
-            ctx.rest({'status':'no'});
+        try{
+            let basis = await Basis.find({}).sort('.createAt');
+            let result = await Basis.update({_id:basis[0]._id},{$set:{hits:basis[0].hits + 1}});
+            ctx.rest({status:true,message:'',result:result});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'网站访问量+1失败'});
         }
     }
 }

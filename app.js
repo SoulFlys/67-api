@@ -5,26 +5,24 @@ import logger from 'koa-logger'
 import cors from 'koa-cors'
 import staticServer from 'koa-static'
 import mongoose from 'mongoose'
+import path from 'path'
+
 import router from './lib/router'
 import init from './lib/init'
 import {port, mongodb, baseApi} from './config'
-import path from 'path'
-
-mongoose.connect(mongodb);
-mongoose.connection.on('error', console.error)
 
 const app = new Koa();
-
+mongoose.connect(mongodb);
+mongoose.connection.on('error', console.error)
 
 app.use(convert.compose(
     staticServer(path.join(__dirname,'uploads')),
     cors(),
     logger(),
     bodyParser(),
-    init.restify('/' + baseApi),
+    init(),
     router()
 ))
-
 
 app.listen(port);
 console.log('app started at port ' + port + '...');
