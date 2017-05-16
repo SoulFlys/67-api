@@ -2,25 +2,36 @@ import Basis from '../models/basis'
 
 module.exports = {
     'POST /admin/basis/add': async(ctx, next) => {
-        let basis = await new Basis(ctx.request.body).save();
-        ctx.rest({'status':'ok'});
+        try{
+            let basis = await new Basis(ctx.request.body).save();
+            ctx.rest({status:true,message:'',result:basis});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'新增基本信息失败',result:{}});
+        }
     },
     'POST /admin/basis': async(ctx, next) => {
-        let basis = await Basis.find({}).sort('.createAt');
-        ctx.rest(basis);
+        try{
+            let basis = await Basis.find({}).sort('.createAt');
+            ctx.rest({status:true,message:'',result:basis});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'获取基本信息失败',result:{}});
+        }
     },
     'PUT /admin/basis/update': async(ctx,next) => {
-        let id = ctx.request.body.id;
-        let basis = await Basis.findById(id);
-        ctx.request.body._id = ctx.request.body.id;
-        delete ctx.request.body.id;
+        try{
+            let id = ctx.request.body.id;
+            let basis = await Basis.findById(id);
+            ctx.request.body._id = ctx.request.body.id;
+            delete ctx.request.body.id;
 
-        Object.assign(basis, ctx.request.body);
-        let result = await new Basis(basis).save();
-        if(result){
-            ctx.rest({'status':'ok'});
-        }else{
-            ctx.rest({'status':'no'});
+            Object.assign(basis, ctx.request.body);
+            let result = await new Basis(basis).save();
+            ctx.rest({status:true,message:'',result:result});
+        }catch(err){
+            console.log(ctx.request.method + ' ' + ctx.request.url , err.message);
+            ctx.rest({status:false,message:'更新基本信息失败',result:{}});
         }
     },
 

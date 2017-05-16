@@ -26,7 +26,9 @@ module.exports = {
         }
     },
     'POST /admin/admin': async(ctx, next) => {
+        console.log(ctx.cookies.get('token'))
         try{
+
             let admins = await Admin.find({}).sort('createAt');
             ctx.rest({status:true,message:'',result:admins});
         }catch(err){
